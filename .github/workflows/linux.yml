@@ -16,11 +16,13 @@ jobs:
     - name: Set version
       id: set_version
       run: echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
-    - name: files
-      run: ls
+
     - name: Build
       run: make
-
+      
+    - name: files
+      run: ls
+      
     - name: Upload build
       uses: actions/upload-artifact@v3
       with:
