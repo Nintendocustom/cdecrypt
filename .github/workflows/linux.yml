@@ -19,10 +19,7 @@ jobs:
 
     - name: Build
       run: make
-      
-    - name: files
-      run: ls
-      
+
     - name: Upload build
       uses: actions/upload-artifact@v3
       with:
