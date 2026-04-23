@@ -1,28 +1,42 @@
 name: Linux
-
 on: [push, pull_request, workflow_dispatch]
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v6
       with:
         fetch-depth: 0
         submodules: recursive
-
     - name: Set version
       id: set_version
       run: echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
-
     - name: Build
       run: make
-
     - name: Upload build
       uses: actions/upload-artifact@v5
       with:
         name: build
         path: cdecrypt
- 
+
+  build-arm:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+        submodules: recursive
+    - name: Set version
+      id: set_version
+      run: echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+    - name: Install ARM cross-compiler
+      run: sudo apt-get install -y gcc-arm-linux-gnueabihf
+    - name: Build for ARM
+      run: make CC=arm-linux-gnueabihf-gcc
+    - name: Upload ARM build
+      uses: actions/upload-artifact@v5
+      with:
+        name: build-arm
+        path: cdecrypt
